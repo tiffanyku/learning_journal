@@ -41,10 +41,9 @@ class Entry(Base):
 
     @classmethod
     def all(cls):
-
         all_entries = DBSession.query(cls)
         all_entries = all_entries.order_by(desc(cls.created))
-        return entries
+        return all_entries
 """
     @classmethod
     def id(cls, id):
