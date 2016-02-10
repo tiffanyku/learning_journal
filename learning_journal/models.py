@@ -3,6 +3,10 @@ from sqlalchemy import (
     Index,
     Integer,
     Text,
+    Unicode,
+    DateTime,
+    desc,
+    func,
     )
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -34,9 +38,17 @@ class Entry(Base):
     created = Column(DateTime, default=datetime.datetime.utcnow)
     edited = Column(DateTime, default=datetime.datetime.utcnow)
     
-    @classmethod
-
-    def by_id(cls, id):
 
     @classmethod
     def all(cls):
+
+        entries = DBSession.query(cls)
+        entries = entries.order_by(desc(cls.created))
+        return entries
+
+    @classmethod
+    def id(cls, id):
+        entries = DBSession.query(cls)
+
+
+
