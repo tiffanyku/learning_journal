@@ -42,13 +42,13 @@ class Entry(Base):
     @classmethod
     def all(cls):
 
-        entries = DBSession.query(cls)
-        entries = entries.order_by(desc(cls.created))
+        all_entries = DBSession.query(cls)
+        all_entries = all_entries.order_by(desc(cls.created))
         return entries
 
     @classmethod
     def id(cls, id):
-        entries = DBSession.query(cls)
+        all_entries = DBSession.query(cls)
 
 
 
