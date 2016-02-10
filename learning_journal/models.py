@@ -36,7 +36,7 @@ class Entry(Base):
     title = Column(Unicode(255), unique=True)
     body = Column(Unicode)
     created = Column(DateTime(timezone=True), default=func.now())
-    edited = Column(DateTime(timezone=True), default=func.now())
+    edited = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
     
 
     @classmethod
