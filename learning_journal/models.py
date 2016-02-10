@@ -33,10 +33,10 @@ Index('my_index', MyModel.name, unique=True, mysql_length=255)
 class Entry(Base):
     __tablename__ = "entries"
     id = Column(Integer, primary_key=True)
-    title = Column(UnicodeText(255), unique=True, required=True)
-    body = Column(UnicodeText, required=False)
-    created = Column(DateTime, default=datetime.datetime.utcnow)
-    edited = Column(DateTime, default=datetime.datetime.utcnow)
+    title = Column(Unicode(255), unique=True)
+    body = Column(Unicode)
+    created = Column(DateTime(timezone=True), default=func.now())
+    edited = Column(DateTime(timezone=True), default=func.now())
     
 
     @classmethod
@@ -45,10 +45,10 @@ class Entry(Base):
         all_entries = DBSession.query(cls)
         all_entries = all_entries.order_by(desc(cls.created))
         return entries
-
+"""
     @classmethod
     def id(cls, id):
         all_entries = DBSession.query(cls)
 
-
+"""
 
