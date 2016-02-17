@@ -35,15 +35,14 @@ class Entry(Base):
     def all(cls, session=None):
         if session is None:
             session = DBSession
-        return session.query(cls).order_by(desc(cls.created))
-"""
+        return session.query(cls).order_by(sa.desc(cls.created)).all()
+
     @classmethod
     def id(cls, id, session=None):
         if session is None:
             session = DBSession
-        return session.query(cls)
+        return session.query(cls).get(id)
 
-"""
 
 class MyModel(Base):
     __tablename__ = 'models'
