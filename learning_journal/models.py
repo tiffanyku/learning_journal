@@ -22,14 +22,6 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
 
-class MyModel(Base):
-    __tablename__ = 'models'
-    id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Integer)
-
-Index('my_index', MyModel.name, unique=True, mysql_length=255)
-
 class Entry(Base):
     __tablename__ = "entries"
     id = Column(Integer, primary_key=True)
@@ -40,14 +32,24 @@ class Entry(Base):
     
 
     @classmethod
-    def all(cls):
-        all_entries = DBSession.query(cls)
-        all_entries = all_entries.order_by(desc(cls.created))
-        return all_entries
+    def all(cls, session=None):
+        if session is None:
+            session = DBSession
+        return session.query(cls).order_by(desc(cls.created))
 """
     @classmethod
-    def id(cls, id):
-        all_entries = DBSession.query(cls)
+    def id(cls, id, session=None):
+        if session is None:
+            session = DBSession
+        return session.query(cls)
 
 """
+
+class MyModel(Base):
+    __tablename__ = 'models'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    value = Column(Integer)
+
+Index('my_index', MyModel.name, unique=True, mysql_length=255)
 
