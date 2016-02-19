@@ -23,33 +23,38 @@ Base = declarative_base()
 
 
 class Entry(Base):
-    __tablename__ = "entries"
+    __tablename__ = 'entries'
     id = Column(Integer, primary_key=True)
-    title = Column(Unicode(255), unique=True)
-    body = Column(Unicode)
-    created = Column(DateTime(timezone=True), default=func.now())
-    edited = Column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
-    
+    title = Column(Unicode(255), unique=True, nullable=False)
+    body = Column(Unicode, default=u'')
+    created = Column(DateTime, default=func.now())
+    edited = Column(DateTime, default=func.now())
 
     @classmethod
     def all(cls, session=None):
+        """return a query with all entries, ordered by creation date reversed
+        """
         if session is None:
             session = DBSession
-        return session.query(cls).order_by(desc(cls.created))
-"""
+        return session.query(cls).order_by(desc(cls.created)).all()
+
     @classmethod
-    def id(cls, id, session=None):
+    def by_id(cls, id, session=None):
+        """return a single entry identified by id
+
+        If no entry exists with the provided id, return None
+        """
         if session is None:
             session = DBSession
-        return session.query(cls)
+        return session.query(cls).get(id)
 
-"""
 
-class MyModel(Base):
-    __tablename__ = 'models'
-    id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Integer)
 
-Index('my_index', MyModel.name, unique=True, mysql_length=255)
+# class MyModel(Base):
+#     __tablename__ = 'models'
+#     id = Column(Integer, primary_key=True)
+#     name = Column(Text)
+#     value = Column(Integer)
+
+# Index('my_index', MyModel.name, unique=True, mysql_length=255)
 
