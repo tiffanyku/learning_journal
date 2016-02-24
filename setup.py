@@ -16,7 +16,8 @@ requires = [
     'SQLAlchemy',
     'transaction',
     'zope.sqlalchemy',
-    'waitress',
+    'waitress', 
+    'wtforms', 
     ]
 
 setup(name='learning_journal',

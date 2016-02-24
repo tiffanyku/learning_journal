@@ -1,6 +1,8 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPFound
+from .forms import EntryCreateForm
 
 from sqlalchemy.exc import DBAPIError
 
@@ -24,13 +26,29 @@ def view(request):
         return HTTPNotFound()
     return {'entry': entry}
 
-@view_config(route_name='action', match_param='action=create', renderer='string')
+@view_config(route_name='action', match_param='action=create',
+             renderer='templates/edit.jinja2')
 def create(request):
-    return 'create page'
+    entry = Entry()
+    form = EntryCreateForm(request.POST)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(entry)
+        DBSession.add(entry)
+        return HTTPFound(location=request.route_url('home'))
+    return {'form': form, 'action': request.matchdict.get('action')}
 
-@view_config(route_name='action', match_param='action=edit', renderer='string')
+@view_config(route_name='action', match_param='action=edit',
+             renderer='templates/edit.jinja2')
 def update(request):
-    return 'edit page'
+    id = int(request.params.get('id', -1))
+    entry = Entry.by_id(id)
+    if not entry:
+        return HTTPNotFound()
+    form = EntryEditForm(request.POST, entry)
+    if request.method == 'POST' and form.validate():
+        form.populate_obj(entry)
+        return HTTPFound(location=request.route_url('detail', id=entry.id))
+    return {'form': form, 'action': request.matchdict.get('action')}
 
 """
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
