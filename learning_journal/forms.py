@@ -22,10 +22,8 @@ class EntryCreateForm(Form):
         filters=[strip_filter]
     )
 
-
 class EntryEditForm(EntryCreateForm):
     id = HiddenField()
-
 
 class LoginForm(Form):
     username = TextField('Username', [validators.Length(min=1, max=255)])

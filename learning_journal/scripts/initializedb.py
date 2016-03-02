@@ -15,8 +15,9 @@ from ..models import (
     DBSession,
     Entry,
     Base,
+    User,
+    password_context,
     )
-
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -35,7 +36,9 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
-    print('ajfhasflashf')
+
     with transaction.manager:
         model = Entry(title='one')
-        DBSession.add(model)
+        encrypted = password_context.encrypt('admin')
+        admin = User(name='admin', password=encrypted)
+        DBSession.add(admin)

@@ -8,6 +8,7 @@ setup.py
 learning_journal/__init__.py
 learning_journal/forms.py
 learning_journal/models.py
+learning_journal/security.py
 learning_journal/tests.py
 learning_journal/views.py
 learning_journal.egg-info/PKG-INFO
